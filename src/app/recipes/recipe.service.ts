@@ -1,28 +1,38 @@
+import { EventEmitter, Injectable } from '@angular/core';
 
 import { Recipe } from './recipe.model';
-import { EventEmitter } from '@angular/core';
+import { Ingredient } from '../shared/ingredient.model';
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
 
+@Injectable()
 export class RecipeService {
+  recipeSelected = new EventEmitter<Recipe>();
 
+  private recipes: Recipe[] = [
+    new Recipe(
+      'Tasty Schnitzel',
+      'A super-tasty Schnitzel - just awesome!',
+      'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
+      [
+        new Ingredient('Meat', 1),
+        new Ingredient('French Fries', 20)
+      ]),
+    new Recipe('Big Fat Burger',
+      'What else you need to say?',
+      'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
+      [
+        new Ingredient('Buns', 2),
+        new Ingredient('Meat', 1)
+      ])
+  ];
 
-    recipeSelected = new EventEmitter<Recipe>();
-    
-    private recipes: Recipe[] = [
-        new Recipe("Recipe 1",
-            "Test recipe description",
-            "https://upload.wikimedia.org/wikipedia/commons/f/fd/Indonesian_Food.png"),
-        new Recipe("Recipe2",
-            "Recipe2 Details",
-            "https://www.hadiah.me/blog/wp-content/uploads/2017/04/160222142607-indonesian-food-bebek-goreng-6558-1900px-super-169.jpg")];
+  constructor(private slService: ShoppingListService) {}
 
+  getRecipes() {
+    return this.recipes.slice();
+  }
 
-    getRecipes() {
-        return this.recipes.slice();
-    }
-
-
-
-
-
-
+  addIngredientsToShoppingList(ingredients: Ingredient[]) {
+    this.slService.addIngredients(ingredients);
+  }
 }
