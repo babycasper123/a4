@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ServersService } from '../servers.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, Data } from '@angular/router';
 
 @Component({
   selector: 'app-server',
@@ -16,14 +16,25 @@ export class ServerComponent implements OnInit {
   private router:Router) { }
 
   ngOnInit() {
-    const id = +this.route.snapshot.params['id'];
-    this.server = this.serversService.getServer(id);
 
-    this.route.params.subscribe(
-      (params:Params) => {
-        this.server = this.serversService.getServer(+params['id']);
+    this.route.data.subscribe(
+      (data:Data) => {
+        this.server = data['server'];
+        // The above sever in data['server'] should match with the name in resolve , ie in resolve (app-routing.ts) the name given in 
+        // object as 'server'.
       }
-    );
+    )
+
+
+
+    // const id = +this.route.snapshot.params['id'];
+    // this.server = this.serversService.getServer(id);
+
+    // this.route.params.subscribe(
+    //   (params:Params) => {
+    //     this.server = this.serversService.getServer(+params['id']);
+    //   }
+    // );
   }
 
   onEdit(){
